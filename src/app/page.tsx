@@ -89,7 +89,6 @@ export default function Page() {
   const send = useCallback(
     async (text: string) => {
       if (!session || !text.trim() || busy) return;
-      const fromStage = session.stage;
       setBusy(true);
       setView("chat");
       setPendingUser(text.trim());
@@ -140,10 +139,7 @@ export default function Page() {
           setSession(final);
           setPendingUser(null);
           setStreaming(null);
-          // 选时段成功：从 selecting_time 进入 confirm_candidates 时跳转成功页
-          if (fromStage === "selecting_time" && final.stage === "confirm_candidates") {
-            setView("pickSuccess");
-          }
+          // 选时段后停留在主界面，让用户在右侧确认写入；成功页只在真正写入后弹
         } else {
           setNotice(errMsg || "连接中断，请重试");
           setPendingUser(null);
@@ -195,7 +191,13 @@ export default function Page() {
     try {
       const r = await fetch(`/api/session/${session.id}/commit`, { method: "POST" });
       const next = await readSession(r);
-      if (next) setSession(next);
+      if (next) {
+        setSession(next);
+        // 只有真正写入主日历成功后，才弹出「查看日历 / 返回」页面
+        if (next.stage === "committed") {
+          setView("pickSuccess");
+        }
+      }
     } finally {
       setBusy(false);
     }
@@ -370,14 +372,14 @@ function PickSuccess({ onView, onBack }: { onView: () => void; onBack: () => voi
             <path d="M20 6 9 17l-5-5" />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-ink">选择成功</h2>
-        <p className="mt-1.5 text-sm text-ink-soft">时间已为你保留，点击查看最新日历。</p>
+        <h2 className="text-lg font-semibold text-ink">已写入日历</h2>
+        <p className="mt-1.5 text-sm text-ink-soft">日程已成功写入你的飞书主日历，点击查看最新日历。</p>
         <div className="mt-6 flex gap-3">
           <button
             onClick={onView}
             className="flex-1 rounded-2xl bg-brand-500 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-600 active:scale-[.99]"
           >
-            查看
+            查看日历
           </button>
           <button
             onClick={onBack}
