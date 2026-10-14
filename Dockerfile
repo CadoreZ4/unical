@@ -33,9 +33,9 @@ COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/postcss.config.mjs ./
 COPY --from=builder /app/tailwind.config.ts ./
 
-# 数据目录（SQLite）需要持久化挂载
+# 数据目录（SQLite）。注意：不要在 Dockerfile 里写 VOLUME 指令，
+# Railway 等平台不支持；持久化由平台卷挂载到 /app/data 实现。
 RUN mkdir -p /app/data
-VOLUME ["/app/data"]
 
 EXPOSE 3000
 
