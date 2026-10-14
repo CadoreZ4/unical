@@ -1,0 +1,24 @@
+# Railway 部署配置
+# 在 Railway 新建项目 → 关联 GitHub 仓库 → 自动检测 Dockerfile
+# 环境变量在 Railway 面板的 Variables 里设置：
+#   CALENDAR_PROVIDER=feishu
+#   NEXT_PUBLIC_CALENDAR_PROVIDER=feishu
+#   FEISHU_APP_ID=...
+#   FEISHU_APP_SECRET=...
+#   FEISHU_REDIRECT_URI=https://你的域名/api/auth/callback
+#   ENCRYPTION_KEY=32字节hex
+#   LLM_BASE_URL=...
+#   LLM_API_KEY=...
+#   LLM_MODEL=...
+#   ALLOWED_OPEN_IDS=（可选）
+#   DATABASE_URL=./data/unical.db
+#
+# Railway 需要开启持久卷：服务设置 → Volumes → 挂载 /app/data
+
+[build]
+builder = "dockerfile"
+
+[deploy]
+startCommand = "npm start"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ 主题变量（RGB 通道，配合 rgb(var(--x) / a)） ============ */
+:root,
+[data-theme="sky"] {
+  --c-brand-50: 238 244 255;
+  --c-brand-100: 219 231 255;
+  --c-brand-200: 187 208 253;
+  --c-brand-300: 150 180 250;
+  --c-brand-500: 59 108 246;
+  --c-brand-600: 47 88 216;
+  --c-brand-700: 39 70 173;
+  --c-surface: 255 255 255;
+  --c-panel: 255 255 255;
+  --c-bg: 243 247 253;
+  --c-bg2: 232 240 252;
+  --c-ink: 28 34 48;
+  --c-ink-soft: 99 109 128;
+  --c-ink-faint: 150 159 173;
+  --c-line: 226 232 242;
+  --c-shadow: 31 56 120;
+}
+
+[data-theme="mint"] {
+  --c-brand-50: 236 248 244;
+  --c-brand-100: 209 239 230;
+  --c-brand-200: 167 224 208;
+  --c-brand-300: 120 205 184;
+  --c-brand-500: 20 184 166;
+  --c-brand-600: 13 148 136;
+  --c-brand-700: 15 118 110;
+  --c-surface: 255 255 255;
+  --c-panel: 255 255 255;
+  --c-bg: 239 248 246;
+  --c-bg2: 225 242 238;
+  --c-ink: 23 44 42;
+  --c-ink-soft: 90 116 111;
+  --c-ink-faint: 143 163 158;
+  --c-line: 211 231 227;
+  --c-shadow: 15 90 84;
+}
+
+[data-theme="peach"] {
+  --c-brand-50: 255 243 238;
+  --c-brand-100: 255 226 216;
+  --c-brand-200: 255 200 184;
+  --c-brand-300: 255 166 140;
+  --c-brand-500: 244 110 82;
+  --c-brand-600: 232 87 61;
+  --c-brand-700: 203 65 48;
+  --c-surface: 255 255 255;
+  --c-panel: 255 255 255;
+  --c-bg: 255 245 240;
+  --c-bg2: 252 232 223;
+  --c-ink: 45 33 29;
+  --c-ink-soft: 122 96 87;
+  --c-ink-faint: 171 147 139;
+  --c-line: 246 226 216;
+  --c-shadow: 150 70 50;
+}
+
+/* ============ 基础 ============ */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: rgb(var(--c-ink));
+  background: linear-gradient(160deg, rgb(var(--c-bg)) 0%, rgb(var(--c-bg2)) 100%) fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(var(--c-brand-200));
+}
+
+/* 细滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--c-line)) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-line));
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl border border-line bg-surface/90 shadow-soft backdrop-blur;
+  }
+}
