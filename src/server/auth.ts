@@ -12,24 +12,6 @@ const AUTH_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 登录态 30 天
 export const AUTH_TTL_SECONDS = AUTH_TTL_MS / 1000;
 const REFRESH_MARGIN_MS = 60 * 1000; // 距过期不足 1 分钟即提前刷新
 
-// 白名单：ALLOWED_OPEN_IDS 为空/未设置时放行所有人；否则只允许列表内的飞书 open_id
-function allowedOpenIds(): Set<string> | null {
-  const raw = process.env.ALLOWED_OPEN_IDS?.trim();
-  if (!raw) return null;
-  return new Set(
-    raw
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean)
-  );
-}
-
-export function isOpenIdAllowed(openId: string): boolean {
-  const wl = allowedOpenIds();
-  if (!wl) return true;
-  return wl.has(openId);
-}
-
 function currentSid(): string | undefined {
   return cookies().get(AUTH_COOKIE)?.value;
 }
@@ -45,14 +27,6 @@ export function issueLogin(
   tokens: FeishuTokenResponse,
   info: FeishuUserInfo
 ): { sid: string; user: AuthUser } {
-  // 白名单校验
-  if (!isOpenIdAllowed(info.openId)) {
-    throw new HttpError(
-      403,
-      "NOT_ALLOWED",
-      "当前账号不在允许名单内，请联系管理员开通权限。"
-    );
-  }
   const userId = repository.upsertFeishuUser({
     openId: info.openId,
     unionId: info.unionId,

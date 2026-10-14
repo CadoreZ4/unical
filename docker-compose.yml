@@ -20,8 +20,6 @@ services:
       - LLM_MODEL=${LLM_MODEL:-}
       # ===== 安全配置 =====
       - ENCRYPTION_KEY=${ENCRYPTION_KEY}
-      # ===== 访问控制（可选）=====
-      - ALLOWED_OPEN_IDS=${ALLOWED_OPEN_IDS:-}
       - DATABASE_URL=./data/unical.db
     volumes:
       - unical-data:/app/data
